@@ -1,70 +1,88 @@
 $(function() {
 let markerCounter = 2,
-    i=0,
-    arr = [{
-        name: "123",
-        id: Math.random(),
-        state: true,
-    },
-    {
-        name: "124",
-        id: Math.random(),
-        state: false,
-    }];
+    arr = [],
+    id=0;
 
+    // INPUT
+    $("#taskInput").keyup(function(event) {    
 
-    // input done
-    $("#taskInput").keyup(function(event) {
-        let inputVal = $("#taskInput").val();
-        if((event.keyCode == 13) && (inputVal != "")) {
-            let task = $(`<li><input type="checkbox" id="checkbox_check">
-            <span id="span" class="inactive">`+inputVal+`</span></li>`);
+        let obj = {};
+        obj.name = $("#taskInput").val();
+        obj.task__id = id;
+        obj.state = false;
+
+        if((event.keyCode == 13) && (obj.name != "")) {
+
+            arr.push(obj);
+
+            let task = $(`<li id="id`+obj.task__id+`" class="list"><input type="checkbox" class="inactive" id="checkbox `+obj.state+ +id+`"/>
+            <span id="span`+id+`" class="inactive">`+obj.name+`</span></li>`);
             $("#task").append(task);
-   
-        };
 
+            $("#taskInput").val("");
+            id++;
+        
+            console.log(arr);
+            
+        };
     });
 
-    // mark done
+    // TOGGLE SDELAN NAKONEC
+    let getter = document.getElementById('task');  
+    console.log(getter);
+
+    getter.onclick = function(e) {
+
+        document.getElementById.innerHTML = e.target.id;
+        let numNeed = document.getElementById.innerHTML.toString().slice(-1);
+        if (document.getElementById.innerHTML.includes("checkbox")) {
+        $("#span" + numNeed).toggleClass("active").removeClass("inactive");
+        
+        }
+    };
+
+
+
+    // NEED A BIT FIX
     $("#mainMarker").click(function() {
-        if ((markerCounter % 2) == 0) {
+        if (((markerCounter % 2) == 0) && ($("input:checkbox").prop("checked") == false)) {
             $("input:checkbox").prop("checked", true);
-            $(".inactive").toggleClass("active").removeClass("inactive");
+            for (let k = 0; k < id; k++)
+            $("#span" + k).toggleClass("active").removeClass("inactive");
         } else {
             $("input:checkbox").prop("checked", false);
-            $(".active").removeClass("active").toggleClass("inactive");
+            for (let k = 0; k < id; k++)
+            $("#span" + k).toggleClass("inactive").removeClass("active");
         };
     markerCounter++;
     });
 
 
-checkbox_check
-
-    // checking
-    $("#checkbox_check").click(function() {
-        $("input:checkbox").prop("checked", true);
-        $(".inactive").toggleClass("active").removeClass("inactive");     
-    });
-
- 
+        //???????
+        
+    // $("#outputField").text(+counter+ " элементов осталось");
 
 
 
+    // //clear
+    // $(".main__cleaner").click(function() {
+    //     arr.length = 0;
+    //     // displayArr();
+    // })
 
-    // filtration
+        // // displaying arr
+    // function displayRemoveArr() {
+    //     arr.forEach(element => {
+    //                 let task = $(`<li id="`+element.task__id+`"><input type="checkbox">
+    //                 <span id="span" class="inactive">`+element.name+`</span></li>`);
+    //                 $("#task").append(task);         
+    //     });
+    // };
 
 
-
-    // rename
-    $('#span').dblclick(function() { 
-        $(this).val().hide();
-    });
-
-
-    // left items
-    $("input").on("click", function() { 
-        $('#outputField').text($('input:checked').val() + ' items left');
-    });
+    // $("li").click(function() {
+    //     console.log("smth");
+    // })
 
 }); 
 

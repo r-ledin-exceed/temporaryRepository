@@ -14,9 +14,14 @@
     align-items: center;
 }
 
+.main__task {
+    list-style: none;
+}
 
-
-
+#test1 {
+    display: flex;
+    justify-content: center;
+}
 
 .active {
     text-decoration: line-through;
