@@ -6,7 +6,7 @@ $(function() {
     getter = document.getElementById('task');
  
     
-    // Left Counter
+    // LEFT COUNTER
     function itemsLeft() {
         let count = 0;
         if (arr.length) {
@@ -37,7 +37,8 @@ $(function() {
             arr.push(obj);
 
             $("#task").append($(`
-            <li class="task__listik" id="list${obj.id}"><input type = "text" id="rewrite${obj.id}" class="hidden">
+            <li class="task__listik" id="list${obj.id}">
+            <input type = "text" id="rewrite${obj.id}" class="rewrite hidden">
             <input type="checkbox" id="${obj.id}"/>
             <span id="span${obj.id}" class="inactive onDblClick">${obj.name}</span>
             <button class="hidden" id="button${obj.id}">delete</button></li>
@@ -89,7 +90,14 @@ $(function() {
 
     //ENABLE-DISABLE MARKER
     function btnCheck() {
-        if (arr.length === 0) {btn.prop("disabled", true)} else {btn.prop("disabled", false)};
+        let count = 0
+        arr.forEach(obj => {
+           if(obj.isChecked) {count++}
+       }); 
+       if (arr.length == count) {btn.prop("disabled", true)} else {btn.prop("disabled", false)};
+       console.log(count)
+       if (arr.length === 0) {$(".main__bottom").addClass("hidden"); $(".main__inputMark").addClass("hidden");
+        } else {$(".main__bottom").removeClass("hidden"); $(".main__inputMark").removeClass("hidden")}
     };
     btnCheck();
     
@@ -103,15 +111,15 @@ $(function() {
                 $("#"+obj.id).prop("checked", true);
                 obj.isChecked = true;
             }
-            else if (($("#"+obj.id).prop("checked"))){
+            // else if (($("#"+obj.id).prop("checked"))){
                 
-            }
+            // }
             
-            else {
-                $("#span"+obj.id).toggleClass("inactive").removeClass("active");
-                $("#"+obj.id).prop("checked", false);
-                obj.isChecked = false;
-            } 
+            // else {
+            //     $("#span"+obj.id).toggleClass("inactive").removeClass("active");
+            //     $("#"+obj.id).prop("checked", false);
+            //     obj.isChecked = false;
+            // } 
             
             // if($("input:checkbox").prop("checked")) {
             //     $("#span"+obj.id).toggleClass("inactive").removeClass("active");
@@ -124,6 +132,7 @@ $(function() {
             // }
 
         });
+        btnCheck();
         itemsLeft();
     });
     
@@ -132,9 +141,9 @@ $(function() {
 
         arr.forEach(obj => {
             if (obj.isChecked) { 
-                $("#list"+obj.id).css("display", "none");
+                $("#list"+obj.id).addClass("hidden");
             } else {
-                $("#list"+obj.id).css("display", "block");
+                $("#list"+obj.id).removeClass("hidden");
             }
         });
 
@@ -142,72 +151,41 @@ $(function() {
     $(".main__filter_done").click(function() {
 
         arr.forEach(obj => {
-            if (obj.isChecked) { 
-                $("#list"+obj.id).css("display", "block");
+            if (!obj.isChecked) { 
+                // $("#list"+obj.id).css("display", "block");
+                $("#list"+obj.id).addClass("hidden");
             } else {
-                $("#list"+obj.id).css("display", "none");
+                $("#list"+obj.id).removeClass("hidden")
             }
+                           
         });
     });
     $(".main__filter_all").click(function() {
 
         arr.forEach(obj => {
-                $("#list"+obj.id).css("display", "block");
-
+            $("#list"+obj.id).removeClass("hidden");
         });
     });
 
+    // CLEAN COMPLETED
     $(".main__cleaner").click(function() {
         //let needToDelete = arr.filter(obj => obj.isChecked === true)
-
-        arr.forEach(obj => {
-            if(obj.isChecked){
-                obj.status = "deleted";
-                debugger
-
-                let neededInd = arr.findIndex(obj => obj.status === "deleted");
-                $("#list"+obj.id).remove();
-                arr.splice(neededInd, 1)
-
-                // $("#list"+obj.id).remove();
-                // arr.splice(0, 1)
-            }
-           
-        })
-
-
-        // arr.forEach(obj => {
-        //     if (obj.isChecked) {
-        //         obj.status = "deleted";
-        //     }
-        //     let needToDelete = arr.filter(obj => obj.status == "deleted")
-        // });
-
-
-        // if ("button"+obj.id === e.target.id) {
-        //     // debugger
-        //     obj.status = "deleted";
-
-        //     let neededInd = arr.findIndex(obj => obj.status === "deleted");
-        //         $("#list"+obj.id).remove();
-        //         arr.splice(neededInd, 1)
-
-        // };  
-
-        // arr.forEach(obj => {
+        for (let i=0; i< 10; i++ ){
+            arr.forEach(obj => {
+                if(obj.isChecked){
+                    obj.status = "deleted";
             
-        //     if(obj.isChecked) {
-        //         debugger
-        //         let indexToDelete = arr.indexOf(obj)
-        //         if (indexToDelete != -1) {
-        //         console.log(indexToDelete);
-        //         arr.splice(indexToDelete, 1);
-        //         $("#list"+obj.id).remove();
-        //         }
-        //     };
 
+                    let neededInd = arr.findIndex(obj => obj.status === "deleted");
+                    $("#list"+obj.id).remove();
+                    arr.splice(neededInd, 1)
 
-        // });
+                    // $("#list"+obj.id).remove();
+                    // arr.splice(0, 1)
+                };
+            
+            });
+        };
         btnCheck();
     });
 
@@ -272,7 +250,8 @@ $(function() {
 
         arr.forEach(obj => {
 
-            if ("list"+obj.id === e.target.id || "span"+obj.id === e.target.id || obj.id === +e.target.id || "button"+obj.id === e.target.id) { 
+            if ("list"+obj.id === e.target.id || "span"+obj.id === e.target.id || obj.id === +e.target.id || 
+            "button"+obj.id === e.target.id || "rewrite"+obj.id === e.target.id) { 
 
                 $("#button"+obj.id).removeClass("hidden");
 
@@ -285,7 +264,8 @@ $(function() {
 
         arr.forEach(obj => {
             
-            if ("list"+obj.id === e.target.id || "span"+obj.id === e.target.id || obj.id === +e.target.id || "button"+obj.id === e.target.id) { 
+            if ("list"+obj.id === e.target.id || "span"+obj.id === e.target.id || obj.id === +e.target.id || 
+            "button"+obj.id === e.target.id || "rewrite"+obj.id === e.target.id) { 
 
                 $("#button"+obj.id).addClass("hidden");
                
